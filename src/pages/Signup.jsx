@@ -1,7 +1,12 @@
 import { Link } from "react-router";
 import "../styles.css";
 
+
 export default function Signup() {
+
+
+
+
   return (
     <div className="auth-page">
       <div className="auth-card">

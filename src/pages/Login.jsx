@@ -1,7 +1,46 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { supabase } from "../credentials";
 import "../styles.css";
+import { useState } from "react";
 
 export default function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("")
+
+  const navigate = useNavigate()
+
+  const login_user = async ()=>{
+
+    
+    
+    try {
+      
+      if(email !== "" && password !== ""){
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        })
+
+        if(error){
+          console.log(error.message);
+          
+        }else{
+          navigate("./todo")
+        }
+        
+      }else{
+        alert("Email or Password is Undefined")
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+
+
+  }
+
+
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -22,6 +61,8 @@ export default function Login() {
               type="email"
               placeholder="you@example.com"
               autoComplete="email"
+              value={email}
+              onChange={(e)=>{setEmail(e.target.value)}}
             />
           </div>
 
@@ -33,10 +74,12 @@ export default function Login() {
               type="password"
               placeholder="••••••••"
               autoComplete="current-password"
+              value={password}
+              onChange={(e)=>{setPassword(e.target.value)}}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
+          <button type="button" className="btn btn-primary" onClick={login_user}>
             Login
           </button>
         </form>
