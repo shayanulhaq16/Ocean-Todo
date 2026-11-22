@@ -9,7 +9,7 @@ export default function Todo() {
           <span className="brand-icon">🌊</span>
           <h1>Ocean Todo</h1>
         </div>
-        <Link to="/login" className="btn btn-ghost">
+        <Link to="/" className="btn btn-ghost">
           Logout
         </Link>
       </header>

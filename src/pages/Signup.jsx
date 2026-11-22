@@ -1,10 +1,48 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "../styles.css";
-
+import { supabase } from "../credentials";
+import { useState } from "react";
 
 export default function Signup() {
 
+  const [userName, setUserName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [conformPassword, setConformPassword] = useState("")
 
+  const navigate = useNavigate()
+
+  const signup_user = async () => {
+
+  
+    try {
+
+      if (userName.trim().length > 3 && email.trim() !== "" && password.trim().length > 7 && password === conformPassword) {
+        const { error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: userName,
+            },
+          },
+        })
+
+        if(error){
+          console.log(error);
+        }else{
+          console.log('success');
+          navigate("../todo")
+        }
+      }else{
+        alert('Something is not defined!');
+      }
+
+    } catch (error) {
+      console.log("error", error);
+    }
+
+  }
 
 
   return (
@@ -27,6 +65,8 @@ export default function Signup() {
               type="text"
               placeholder="Your name"
               autoComplete="name"
+              value={userName}
+              onChange={(e)=>setUserName(e.target.value)}
             />
           </div>
 
@@ -38,6 +78,8 @@ export default function Signup() {
               type="email"
               placeholder="you@example.com"
               autoComplete="email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
 
@@ -49,6 +91,8 @@ export default function Signup() {
               type="password"
               placeholder="At least 6 characters"
               autoComplete="new-password"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </div>
 
@@ -60,16 +104,18 @@ export default function Signup() {
               type="password"
               placeholder="Re-enter password"
               autoComplete="new-password"
+              value={conformPassword}
+              onChange={(e)=>setConformPassword(e.target.value)}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
+          <button type="button" className="btn btn-primary" onClick={signup_user}>
             Sign up
           </button>
         </form>
 
         <p className="switch-text">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/">Login</Link>
         </p>
       </div>
     </div>
