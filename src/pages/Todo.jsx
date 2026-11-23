@@ -12,6 +12,8 @@ export default function Todo() {
 
   const [flag, setFlag] = useState(null)
 
+  const [supabaseUser, setSupabaseUser] = useState(null);
+
   const addTask = async () => {
 
 
@@ -23,13 +25,14 @@ export default function Todo() {
 
           const { error } = await supabase
             .from('todos')
-            .insert({ user_id: 1, text: task.trim() })
+            .insert({ user_id: supabaseUser, text: task.trim() })
 
           if (error) {
             console.log(error.message);
           } else {
             console.log('success');
             setFetchTask(!fetchTask)
+            setTask("");
           }
 
         } else {
@@ -65,34 +68,9 @@ export default function Todo() {
 
   }
 
-  const fetching_allTasks = async () => {
-
-    try {
-
-      const { data, error } = await supabase
-        .from('todos')
-        .select()
-        .eq("user_id", "1")
-        .order('id', { ascending: true })
-
-      if (data) {
-        setTasksArray(data)
-
-
-      } else {
-        console.log(error.message);
-
-      }
-
-    } catch (error) {
-      console.log(error);
-
-    }
-
-  }
-
+  
   const delete_task = async (index) => {
-
+    
     try {
 
       const response = await supabase
@@ -104,23 +82,85 @@ export default function Todo() {
 
     } catch (error) {
       console.log(error);
-
+      
     }
-
+    
   }
 
   const edit_task = async (text, index) => {
-
+    
     setTask(text)
 
     setFlag(index)
 
   }
 
+  const get_user = async () => {
 
+    try {
+
+      const { data: { user }, error } = await supabase.auth.getUser()
+
+      if (user) {
+        console.log(user.id);
+        setSupabaseUser(user.id)
+      } else {
+        console.error(error.message);
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
+  
+  const fetching_allTasks = async () => {
+
+    try {
+
+      const { data, error } = await supabase
+        .from('todos')
+        .select()
+        .eq("user_id", supabaseUser)
+        .order('id', { ascending: true })
+
+      if (data) {
+        
+        setTasksArray(data)
+        
+        
+
+      } else {
+        console.log(error.message);
+      }
+
+    } catch (error) {
+      console.log("error");
+
+    }
+
+
+
+  }
   useEffect(() => {
-    fetching_allTasks()
-  }, [fetchTask])
+
+    get_user()
+
+
+
+  }, [])
+
+  useEffect(()=>{
+
+    if(supabaseUser){
+
+      fetching_allTasks();
+    }
+    
+
+  }, [supabaseUser, fetchTask])
 
 
 
