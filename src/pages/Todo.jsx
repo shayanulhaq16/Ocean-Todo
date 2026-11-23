@@ -186,7 +186,14 @@ export default function Todo() {
             placeholder="What do I need to do?"
             autoComplete="off"
             value={task}
-            onChange={(e) => setTask(e.target.value)}
+            onChange={(e) => setTask(e.target.value)
+            }
+            onKeyDown={(e)=>{
+              if(e.key === "Enter"){
+                e.preventDefault(); 
+                addTask();
+              }
+            }}
           />
           <button type="button" className="btn btn-primary" onClick={addTask}>
             {flag
