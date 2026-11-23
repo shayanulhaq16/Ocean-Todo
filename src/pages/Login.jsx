@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { supabase } from "../credentials";
+import {supabase}  from "../credentials";
 import "../styles.css";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ export default function Login() {
       
       if(email !== "" && password !== ""){
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password,
         })

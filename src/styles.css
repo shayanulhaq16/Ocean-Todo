@@ -306,6 +306,27 @@ a:hover {
   color: var(--muted);
   padding: 20px 0;
 }
+/* ---------- Edit & Delete actions ---------- */
+.todo-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-btn {
+  border: none;
+  background: transparent;
+  color: var(--brown);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: var(--brown-soft);
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
