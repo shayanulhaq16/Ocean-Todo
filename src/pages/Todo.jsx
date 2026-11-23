@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "../credentials";
 import "../styles.css";
@@ -68,9 +68,9 @@ export default function Todo() {
 
   }
 
-  
+
   const delete_task = async (index) => {
-    
+
     try {
 
       const response = await supabase
@@ -82,40 +82,40 @@ export default function Todo() {
 
     } catch (error) {
       console.log(error);
-      
+
     }
-    
+
   }
 
   const edit_task = async (text, index) => {
-    
+
     setTask(text)
 
     setFlag(index)
 
   }
 
+  const navigate = useNavigate();
   const get_user = async () => {
 
     try {
 
-      const { data: { user }, error } = await supabase.auth.getUser()
+      const { data: { user } } = await supabase.auth.getUser()
 
       if (user) {
-        console.log(user.id);
         setSupabaseUser(user.id)
       } else {
-        console.error(error.message);
+        navigate("/")
       }
-      
+
     } catch (error) {
       console.log(error);
-      
+
     }
 
   }
 
-  
+
   const fetching_allTasks = async () => {
 
     try {
@@ -127,10 +127,10 @@ export default function Todo() {
         .order('id', { ascending: true })
 
       if (data) {
-        
+
         setTasksArray(data)
-        
-        
+
+
 
       } else {
         console.log(error.message);
@@ -144,6 +144,29 @@ export default function Todo() {
 
 
   }
+
+
+  const signOut = async () => {
+
+    try {
+
+      const { error } = await supabase.auth.signOut()
+
+      if (error) {
+        console.log(error.message);
+
+      } else {
+        setSupabaseUser(null)
+        navigate("/")
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
+
+  }
+
   useEffect(() => {
 
     get_user()
@@ -152,13 +175,13 @@ export default function Todo() {
 
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(supabaseUser){
+    if (supabaseUser) {
 
       fetching_allTasks();
     }
-    
+
 
   }, [supabaseUser, fetchTask])
 
@@ -171,7 +194,9 @@ export default function Todo() {
           <span className="brand-icon">🌊</span>
           <h1>Ocean Todo</h1>
         </div>
-        <Link to="/" className="btn btn-ghost">
+        <Link to="/" className="btn btn-ghost" onClick={() => {
+          signOut()
+        }}>
           Logout
         </Link>
       </header>
@@ -188,9 +213,9 @@ export default function Todo() {
             value={task}
             onChange={(e) => setTask(e.target.value)
             }
-            onKeyDown={(e)=>{
-              if(e.key === "Enter"){
-                e.preventDefault(); 
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
                 addTask();
               }
             }}
@@ -244,3 +269,6 @@ export default function Todo() {
     </div>
   );
 }
+
+
+// Logout pr supabase user ko null
