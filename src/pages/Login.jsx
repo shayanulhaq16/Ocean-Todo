@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
-import {supabase}  from "../credentials";
+import { supabase } from "../credentials";
+import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
 import { useState } from "react";
 
@@ -10,31 +11,45 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  const login_user = async ()=>{
+  const login_user = async () => {
 
-    
-    
+
+
     try {
-      
-      if(email !== "" && password !== ""){
+
+      if (email !== "" && password !== "") {
 
         const { error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password,
         })
 
-        if(error){
-          console.log(error.message);
-          
-        }else{
+        if (error) {
+          Report.failure(
+            error.message,
+            'There is no such User-Account ! <br/><br/>- Ocean Todo',
+            'Okay',
+          );
+
+        } else {
           navigate("./todo")
         }
-        
-      }else{
-        alert("Email or Password is Undefined")
+
+      } else {
+
+        Report.failure(
+          "Login Failed",
+          'Email or Password is Undefined ! <br/><br/>- Ocean Todo',
+          'Okay',
+        );
       }
+      
     } catch (error) {
-      console.log("Error", error);
+      Report.warning(
+        'Ocean Todo',
+        error?.message || error,
+        'Okay',
+      );
     }
 
 
@@ -62,7 +77,7 @@ export default function Login() {
               placeholder="you@example.com"
               autoComplete="email"
               value={email}
-              onChange={(e)=>{setEmail(e.target.value)}}
+              onChange={(e) => { setEmail(e.target.value) }}
             />
           </div>
 
@@ -75,7 +90,7 @@ export default function Login() {
               placeholder="••••••••"
               autoComplete="current-password"
               value={password}
-              onChange={(e)=>{setPassword(e.target.value)}}
+              onChange={(e) => { setPassword(e.target.value) }}
             />
           </div>
 
