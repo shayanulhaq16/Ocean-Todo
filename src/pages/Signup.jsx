@@ -140,6 +140,6 @@ export default function Signup() {
 
 
 
-// signup or todo me notofilix ko laagana ha
+
 // download pdf ka opition lagana ha
 // spinner laganay ha sab me

@@ -1,4 +1,6 @@
 import { Link, useNavigate } from "react-router";
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { jsPDF } from "jspdf";
 import { useEffect, useState } from "react";
 import { supabase } from "../credentials";
 import "../styles.css";
@@ -214,6 +216,22 @@ export default function Todo() {
 
   }
 
+
+
+function downloadPdf(tasks) {
+  const doc = new jsPDF();
+
+  doc.setFontSize(18); // for heading
+  doc.text("Ocean Todo - My Tasks", 14, 20);
+
+  doc.setFontSize(12); // for all tasks
+  tasks.forEach((task, index) => {
+    doc.text(`${index + 1}. ${task.text}`, 14, 35 + index * 10);
+  });
+
+  doc.save("ocean-todo.pdf");
+}
+
   useEffect(() => {
 
     get_user()
@@ -309,8 +327,11 @@ export default function Todo() {
         </ul>
 
         <div className="todo-footer">
-          <span>2 items left</span>
-          <button className="btn btn-ghost">Clear completed</button>
+          <span>{tasksArray.length} items left</span>
+          <div className="footer-actions">
+            <button className="btn btn-ghost">Clear completed</button>
+            <button className="btn btn-primary pdf-btn" onClick={() => downloadPdf(tasksArray)}>Download PDF</button>
+          </div>
         </div>
       </main>
     </div>
@@ -318,4 +339,5 @@ export default function Todo() {
 }
 
 
-// Logout pr supabase user ko null
+// jaha error nhi ha jese empty input feild waha waring alert kerna ha or uska tile "Empty field " kerna ha
+// delete ke btn pr conform change kerna ha

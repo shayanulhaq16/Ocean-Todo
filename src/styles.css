@@ -62,6 +62,7 @@ a:hover {
 
 .btn-ghost {
   background: transparent;
+  padding: 10px;
   color: var(--brown);
   border: 1px solid var(--brown-light);
 }
@@ -326,6 +327,39 @@ a:hover {
 
 .edit-btn:hover {
   background: var(--brown-soft);
+}
+
+/* ---------- Footer actions & PDF button ---------- */
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdf-btn {
+  width: auto;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+}
+
+/* Print ke waqt sirf task list dikhe, header aur buttons nahi */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .todo-header,
+  .add-form,
+  .filters,
+  .todo-footer,
+  .todo-item .edit-btn,
+  .todo-item .delete-btn {
+    display: none !important;
+  }
+
+  .todo-card {
+    box-shadow: none;
+  }
 }
 
 /* ---------- Responsive ---------- */
