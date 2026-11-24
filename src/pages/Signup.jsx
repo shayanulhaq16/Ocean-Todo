@@ -4,6 +4,8 @@ import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
 import { supabase } from "../credentials";
 
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function Signup() {
 
   const [userName, setUserName] = useState("")
@@ -18,7 +20,7 @@ export default function Signup() {
 
     try {
 
-      if (userName.trim().length > 3 && email.trim() !== "" && password.trim().length > 7 && password === conformPassword) {
+      if (userName.trim().length > 3 && EMAIL_REGEX.test(email.trim()) && password.trim().length > 7 && password === conformPassword) {
         const { error } = await supabase.auth.signUp({
           email: email,
           password: password,
@@ -141,5 +143,5 @@ export default function Signup() {
 
 
 
-// download pdf ka opition lagana ha
+
 // spinner laganay ha sab me
