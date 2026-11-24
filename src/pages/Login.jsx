@@ -30,8 +30,12 @@ export default function Login() {
             'There is no such User-Account ! <br/><br/>- Ocean Todo',
             'Okay',
           );
-
+          
         } else {
+          Report.success(
+            "Login Success",
+            'You are in! <br/><br/>- Ocean Todo',
+          );
           navigate("./todo")
         }
 

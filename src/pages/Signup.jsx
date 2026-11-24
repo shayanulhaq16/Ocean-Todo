@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
 import { supabase } from "../credentials";
-import { useState } from "react";
 
 export default function Signup() {
 
@@ -14,7 +15,7 @@ export default function Signup() {
 
   const signup_user = async () => {
 
-  
+
     try {
 
       if (userName.trim().length > 3 && email.trim() !== "" && password.trim().length > 7 && password === conformPassword) {
@@ -28,18 +29,33 @@ export default function Signup() {
           },
         })
 
-        if(error){
-          console.log(error);
-        }else{
-          console.log('success');
+        if (error) {
+          Report.failure(
+            "Something went Wrong!",
+            error.message,
+            'Okay',
+          );
+        } else {
+          Report.success(
+            "Login Success",
+            '<p>You are in! <br/><br/>- Ocean Todo<p/>',
+          );
           navigate("../todo")
         }
-      }else{
-        alert('Something is not defined!');
-      }
-
-    } catch (error) {
-      console.log("error", error);
+      } else {
+        Report.failure(
+            "Error",
+            "Something is not defined! <br/><br/>- Ocean Todo",
+            'Okay',
+          );
+        }
+        
+      } catch (error) {
+      Report.failure(
+          "Error",
+          error?.message || error,
+          'Okay',
+        );
     }
 
   }
@@ -66,7 +82,7 @@ export default function Signup() {
               placeholder="Your name"
               autoComplete="name"
               value={userName}
-              onChange={(e)=>setUserName(e.target.value)}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
@@ -79,7 +95,7 @@ export default function Signup() {
               placeholder="you@example.com"
               autoComplete="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -92,7 +108,7 @@ export default function Signup() {
               placeholder="At least 6 characters"
               autoComplete="new-password"
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -105,7 +121,7 @@ export default function Signup() {
               placeholder="Re-enter password"
               autoComplete="new-password"
               value={conformPassword}
-              onChange={(e)=>setConformPassword(e.target.value)}
+              onChange={(e) => setConformPassword(e.target.value)}
             />
           </div>
 
@@ -121,3 +137,9 @@ export default function Signup() {
     </div>
   );
 }
+
+
+
+// signup or todo me notofilix ko laagana ha
+// download pdf ka opition lagana ha
+// spinner laganay ha sab me
