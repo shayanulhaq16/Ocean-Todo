@@ -28,9 +28,12 @@ export default function Todo() {
             .insert({ user_id: supabaseUser, text: task.trim() })
 
           if (error) {
-            console.log(error.message);
+            Report.failure(
+              "Something went Wrong!",
+              error.message,
+              'Okay',
+            );
           } else {
-            console.log('success');
             setFetchTask(!fetchTask)
             setTask("");
           }
@@ -42,9 +45,12 @@ export default function Todo() {
             .eq('id', flag)
 
           if (error) {
-            console.log(error.message);
+            Report.failure(
+              "Something went Wrong!",
+              error.message,
+              'Okay',
+            );
           } else {
-            console.log('success');
             setFetchTask(!fetchTask);
             setTask("");
             setFlag(null)
@@ -55,12 +61,20 @@ export default function Todo() {
 
 
       } else {
-        alert("Write Your today's task!")
+        Report.failure(
+          "Error",
+          "Write Your today's task!",
+          'Okay',
+        );
       }
 
     } catch (error) {
 
-      console.log(error);
+      Report.failure(
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
 
 
     }
@@ -81,7 +95,11 @@ export default function Todo() {
       setFetchTask(!fetchTask)
 
     } catch (error) {
-      console.log(error);
+      Report.failure(
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
 
     }
 
@@ -105,11 +123,20 @@ export default function Todo() {
       if (user) {
         setSupabaseUser(user.id)
       } else {
+        Report.failure(
+          "Error",
+          "There is no User login",
+          'Okay',
+        );
         navigate("/")
       }
 
     } catch (error) {
-      console.log(error);
+      Report.failure(
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
 
     }
 
@@ -133,11 +160,19 @@ export default function Todo() {
 
 
       } else {
-        console.log(error.message);
+        Report.failure(
+          "Something went Wrong!",
+          error.message,
+          'Okay',
+        );
       }
 
     } catch (error) {
-      console.log("error");
+      Report.failure(
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
 
     }
 
@@ -153,15 +188,27 @@ export default function Todo() {
       const { error } = await supabase.auth.signOut()
 
       if (error) {
-        console.log(error.message);
+        Report.failure(
+          "Something went Wrong!",
+          error.message,
+          'Okay',
+        );
 
       } else {
         setSupabaseUser(null)
+        Report.success(
+          "Sign Out Success",
+          '<p>You are signed out! <br/><br/>- Ocean Todo<p/>',
+        );
         navigate("/")
       }
 
     } catch (error) {
-      console.log(error);
+      Report.failure(
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
 
     }
 
