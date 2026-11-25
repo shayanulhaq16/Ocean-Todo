@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../credentials";
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { PropagateLoader } from "react-spinners";
 import "../styles.css";
 import { useState, useEffect } from "react";
 
@@ -8,6 +9,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function Login() {
 
+    const [loader, setLoader] = useState(false)
 
   // ye HTML ko chalanay ke liye ha alert me
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function Login() {
 
   const login_user = async () => {
 
-
+setLoader(true);
 
     try {
 
@@ -81,6 +83,8 @@ export default function Login() {
         error?.message || error,
         'Okay',
       );
+    }finally{
+      setLoader(false)
     }
 
 
@@ -126,7 +130,12 @@ export default function Login() {
           </div>
 
           <button type="button" className="btn btn-primary" onClick={login_user}>
-            Login
+            {loader
+                          ?
+                          <PropagateLoader color="#6B4A2F" />
+                          :
+                          "Download PDF"
+                        }
           </button>
         </form>
 

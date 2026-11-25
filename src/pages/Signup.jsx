@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { PropagateLoader } from "react-spinners";
 import "../styles.css";
 import { supabase } from "../credentials";
 
@@ -8,6 +9,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function Signup() {
 
+  const [loader, setLoader] = useState(false)
 
   // ye HTML ko chalanay ke liye ha alert me
   useEffect(() => {
@@ -26,10 +28,11 @@ export default function Signup() {
 
   const signup_user = async () => {
 
+    setLoader(true);
 
     try {
 
-      if(userName.trim().length < 3){
+      if (userName.trim().length < 3) {
 
         Report.warning(
           'Name Error',
@@ -95,7 +98,7 @@ export default function Signup() {
           );
           navigate("../todo")
         }
-      } 
+      }
 
     } catch (error) {
       Report.failure(
@@ -103,6 +106,8 @@ export default function Signup() {
         error?.message || error,
         'Okay',
       );
+    } finally {
+      setLoader(false)
     }
 
   }
@@ -173,7 +178,11 @@ export default function Signup() {
           </div>
 
           <button type="button" className="btn btn-primary" onClick={signup_user}>
-            Sign up
+            {loader
+              ?
+              <PropagateLoader color="#6B4A2F" />
+              :
+              "Sign up"}
           </button>
         </form>
 
