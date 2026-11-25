@@ -218,19 +218,29 @@ export default function Todo() {
 
 
 
-function downloadPdf(tasks) {
-  const doc = new jsPDF();
+  function downloadPdf(tasks) {
 
-  doc.setFontSize(18); // for heading
-  doc.text("Ocean Todo - My Tasks", 14, 20);
+    if (tasksArray.length === 0) {
+      Report.warning(
+        'No Tasks List',
+        "There is no Tasks Lists to be printed!",
+        'Okay',
+      );
+      return
+    }
 
-  doc.setFontSize(12); // for all tasks
-  tasks.forEach((task, index) => {
-    doc.text(`${index + 1}. ${task.text}`, 14, 35 + index * 10);
-  });
+    const doc = new jsPDF();
 
-  doc.save("ocean-todo.pdf");
-}
+    doc.setFontSize(18); // for heading
+    doc.text("Ocean Todo - My Tasks", 14, 20);
+
+    doc.setFontSize(12); // for all tasks
+    tasks.forEach((task, index) => {
+      doc.text(`${index + 1}. ${task.text}`, 14, 35 + index * 10);
+    });
+
+    doc.save("ocean-todo.pdf");
+  }
 
   useEffect(() => {
 
