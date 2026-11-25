@@ -10,11 +10,11 @@ export default function Signup() {
 
 
   // ye HTML ko chalanay ke liye ha alert me
-    useEffect(() => {
-      Report.init({
-        plainText: false,
-      });
-    }, []);
+  useEffect(() => {
+    Report.init({
+      plainText: false,
+    });
+  }, []);
 
 
   const [userName, setUserName] = useState("")
@@ -29,7 +29,49 @@ export default function Signup() {
 
     try {
 
-      if (userName.trim().length > 3 && EMAIL_REGEX.test(email.trim()) && password.trim().length > 7 && password === conformPassword) {
+      if(userName.trim().length < 3){
+
+        Report.warning(
+          'Name Error',
+          "Enter your full Name (at least 3 characters)!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+      }
+
+      else if (!email.trim()) {
+        Report.warning(
+          'Empty Email',
+          "There is no email!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+      }
+      else if (!EMAIL_REGEX.test(email.trim())) {
+        Report.warning(
+          'Email Error',
+          "There is not a Perfect email!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+
+      } else if (password.trim().length <= 7) {
+        Report.warning(
+          'Password Error',
+          "Enter your email password (at least 8 characters)!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+
+      } else if (password !== conformPassword) {
+        Report.warning(
+          'Conform Password Error',
+          "Confirm your password (Enter password again)!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+
+      } else {
         const { error } = await supabase.auth.signUp({
           email: email,
           password: password,
@@ -53,20 +95,14 @@ export default function Signup() {
           );
           navigate("../todo")
         }
-      } else {
-        Report.failure(
-            "Error",
-            "Something is not defined! <br/><br/>- Ocean Todo",
-            'Okay',
-          );
-        }
-        
-      } catch (error) {
+      } 
+
+    } catch (error) {
       Report.failure(
-          "Error",
-          error?.message || error,
-          'Okay',
-        );
+        "Error",
+        error?.message || error,
+        'Okay',
+      );
     }
 
   }
@@ -116,7 +152,7 @@ export default function Signup() {
               id="password"
               name="password"
               type="password"
-              placeholder="At least 6 characters"
+              placeholder="At least 8 characters"
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
