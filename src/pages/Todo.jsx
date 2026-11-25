@@ -7,6 +7,13 @@ import "../styles.css";
 
 export default function Todo() {
 
+  // ye HTML ko chalanay ke liye ha alert me
+    useEffect(() => {
+      Report.init({
+        plainText: false,
+      });
+    }, []);
+
   const [task, setTask] = useState("")
   const [tasksArray, setTasksArray] = useState([])
 
@@ -63,8 +70,8 @@ export default function Todo() {
 
 
       } else {
-        Report.failure(
-          "Error",
+        Report.warning(
+          "Empty Feild",
           "Write Your today's task!",
           'Okay',
         );
@@ -200,7 +207,7 @@ export default function Todo() {
         setSupabaseUser(null)
         Report.success(
           "Sign Out Success",
-          '<p>You are signed out! <br/><br/>- Ocean Todo<p/>',
+          'You are signed out! <br/><br/>- Ocean Todo',
         );
         navigate("/")
       }

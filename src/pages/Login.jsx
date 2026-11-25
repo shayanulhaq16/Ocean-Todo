@@ -2,9 +2,17 @@ import { Link, useNavigate } from "react-router";
 import { supabase } from "../credentials";
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Login() {
+
+
+  // ye HTML ko chalanay ke liye ha alert me
+  useEffect(() => {
+    Report.init({
+      plainText: false,
+    });
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
@@ -30,7 +38,7 @@ export default function Login() {
             'There is no such User-Account ! <br/><br/>- Ocean Todo',
             'Okay',
           );
-          
+
         } else {
           Report.success(
             "Login Success",
@@ -47,7 +55,7 @@ export default function Login() {
           'Okay',
         );
       }
-      
+
     } catch (error) {
       Report.warning(
         'Ocean Todo',

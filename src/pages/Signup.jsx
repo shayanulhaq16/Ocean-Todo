@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
@@ -7,6 +7,15 @@ import { supabase } from "../credentials";
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function Signup() {
+
+
+  // ye HTML ko chalanay ke liye ha alert me
+    useEffect(() => {
+      Report.init({
+        plainText: false,
+      });
+    }, []);
+
 
   const [userName, setUserName] = useState("")
   const [email, setEmail] = useState("")
