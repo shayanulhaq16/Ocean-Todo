@@ -4,6 +4,8 @@ import { Report } from 'notiflix/build/notiflix-report-aio';
 import "../styles.css";
 import { useState, useEffect } from "react";
 
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function Login() {
 
 
@@ -25,7 +27,31 @@ export default function Login() {
 
     try {
 
-      if (email !== "" && password !== "") {
+      if (!email.trim()) {
+        Report.warning(
+          'Empty Email',
+          "There is no email!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+      }
+      else if (!EMAIL_REGEX.test(email.trim())) {
+        Report.warning(
+          'Email Error',
+          "There is no Perfect email!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+
+      } else if (password.trim() > 7) {
+        Report.warning(
+          'Password Error',
+          "Write Your Email Password!<br/><br/>- Ocean Todo",
+          'Okay',
+        );
+        return;
+
+      } else {
 
         const { error } = await supabase.auth.signInWithPassword({
           email: email,
@@ -47,13 +73,6 @@ export default function Login() {
           navigate("./todo")
         }
 
-      } else {
-
-        Report.failure(
-          "Login Failed",
-          'Email or Password is Undefined ! <br/><br/>- Ocean Todo',
-          'Okay',
-        );
       }
 
     } catch (error) {
