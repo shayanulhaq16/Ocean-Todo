@@ -46,7 +46,7 @@ export default function Login() {
       } else if (password.trim().length < 8) {
         Report.warning(
           'Password Error',
-          "Write Your Email Password!<br/><br/>- Ocean Todo",
+          "Write Your Perfect Email Password!<br/><br/>- Ocean Todo",
           'Okay',
         );
         return;

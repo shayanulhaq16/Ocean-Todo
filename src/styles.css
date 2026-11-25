@@ -54,6 +54,7 @@ a:hover {
   background: var(--brown);
   color: #fff;
   width: 100%;
+  min-height: 44px;
 }
 
 .btn-primary:hover {
@@ -340,6 +341,12 @@ a:hover {
   width: auto;
   padding: 10px 16px;
   font-size: 0.9rem;
+}
+
+.dataLoader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Print ke waqt sirf task list dikhe, header aur buttons nahi */

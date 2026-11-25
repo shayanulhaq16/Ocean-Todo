@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { PropagateLoader } from "react-spinners";
 import { jsPDF } from "jspdf";
 import { useEffect, useState } from "react";
 import { supabase } from "../credentials";
@@ -8,11 +9,11 @@ import "../styles.css";
 export default function Todo() {
 
   // ye HTML ko chalanay ke liye ha alert me
-    useEffect(() => {
-      Report.init({
-        plainText: false,
-      });
-    }, []);
+  useEffect(() => {
+    Report.init({
+      plainText: false,
+    });
+  }, []);
 
   const [task, setTask] = useState("")
   const [tasksArray, setTasksArray] = useState([])
@@ -23,8 +24,14 @@ export default function Todo() {
 
   const [supabaseUser, setSupabaseUser] = useState(null);
 
+  const [addLoader, setAddLoader] = useState(false);
+  const [dataLoader, setDataLaoder] = useState(false);
+  const [pdfLoader, setPdfLoader] = useState(false);
+
+
   const addTask = async () => {
 
+    setAddLoader(true)
 
     try {
 
@@ -86,6 +93,8 @@ export default function Todo() {
       );
 
 
+    } finally {
+      setAddLoader(false)
     }
 
 
@@ -153,6 +162,7 @@ export default function Todo() {
 
 
   const fetching_allTasks = async () => {
+    setDataLaoder(true)
 
     try {
 
@@ -183,6 +193,8 @@ export default function Todo() {
         'Okay',
       );
 
+    }finally{
+      setDataLaoder(false)
     }
 
 
@@ -227,15 +239,18 @@ export default function Todo() {
 
   function downloadPdf(tasks) {
 
+    setPdfLoader(true);
+
     if (tasksArray.length === 0) {
       Report.warning(
         'No Tasks List',
         "There is no Tasks Lists to be printed!",
         'Okay',
       );
+      setPdfLoader(false);
       return
     }
-
+    
     const doc = new jsPDF();
 
     doc.setFontSize(18); // for heading
@@ -245,8 +260,10 @@ export default function Todo() {
     tasks.forEach((task, index) => {
       doc.text(`${index + 1}. ${task.text}`, 14, 35 + index * 10);
     });
-
+    
     doc.save("ocean-todo.pdf");
+    setPdfLoader(false);
+
   }
 
   useEffect(() => {
@@ -303,11 +320,15 @@ export default function Todo() {
             }}
           />
           <button type="button" className="btn btn-primary" onClick={addTask}>
-            {flag
+            {addLoader
               ?
-              "Update"
+              <PropagateLoader color="#6B4A2F" />
               :
-              "Add"}
+              (flag
+                ?
+                "Update"
+                :
+                "Add")}
           </button>
         </form>
 
@@ -319,7 +340,11 @@ export default function Todo() {
 
         <ul className="todo-list">
 
-          {tasksArray.map((element, index) => {
+          {dataLoader
+          ?
+          <div className="dataLoader"><PropagateLoader color="#6B4A2F" /></div>          
+          :
+          (tasksArray.map((element, index) => {
             return (<li className="todo-item" key={index}>
               <input type="checkbox" />
               <span className="todo-text">{element.text}</span>
@@ -338,7 +363,8 @@ export default function Todo() {
                 </button>
               </div>
             </li>)
-          })}
+          }))
+        }
 
 
         </ul>
@@ -347,7 +373,15 @@ export default function Todo() {
           <span>{tasksArray.length} items left</span>
           <div className="footer-actions">
             <button className="btn btn-ghost">Clear completed</button>
-            <button className="btn btn-primary pdf-btn" onClick={() => downloadPdf(tasksArray)}>Download PDF</button>
+            <button className="btn btn-primary pdf-btn" onClick={() => downloadPdf(tasksArray)}>
+              {pdfLoader
+              ?
+              <PropagateLoader color="#6B4A2F" />
+              :
+              "Download PDF"
+            }
+
+            </button>
           </div>
         </div>
       </main>
