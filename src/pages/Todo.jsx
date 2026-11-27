@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { Report } from 'notiflix/build/notiflix-report-aio';
-import { PropagateLoader } from "react-spinners";
+import { PropagateLoader, BeatLoader } from "react-spinners";
 import { jsPDF } from "jspdf";
 import { useEffect, useState } from "react";
 import { supabase } from "../credentials";
@@ -193,7 +193,7 @@ export default function Todo() {
         'Okay',
       );
 
-    }finally{
+    } finally {
       setDataLaoder(false)
     }
 
@@ -250,7 +250,7 @@ export default function Todo() {
       setPdfLoader(false);
       return
     }
-    
+
     const doc = new jsPDF();
 
     doc.setFontSize(18); // for heading
@@ -260,7 +260,7 @@ export default function Todo() {
     tasks.forEach((task, index) => {
       doc.text(`${index + 1}. ${task.text}`, 14, 35 + index * 10);
     });
-    
+
     doc.save("ocean-todo.pdf");
     setPdfLoader(false);
 
@@ -322,7 +322,8 @@ export default function Todo() {
           <button type="button" className="btn btn-primary" onClick={addTask}>
             {addLoader
               ?
-              <PropagateLoader color="#6B4A2F" />
+
+              <BeatLoader size={8} color="#9e836c" />
               :
               (flag
                 ?
@@ -341,30 +342,30 @@ export default function Todo() {
         <ul className="todo-list">
 
           {dataLoader
-          ?
-          <div className="dataLoader"><PropagateLoader color="#6B4A2F" /></div>          
-          :
-          (tasksArray.map((element, index) => {
-            return (<li className="todo-item" key={index}>
-              <input type="checkbox" />
-              <span className="todo-text">{element.text}</span>
-              <div className="todo-actions">
-                <button className="edit-btn" aria-label="Edit task" onClick={() => {
-                  edit_task(element.text, element.id)
-                }}>
-                  ✎
-                </button>
-                <button className="delete-btn" aria-label="Delete task" onClick={() => {
-                  if (confirm("Have you complete it!")) {
-                    delete_task(element.id)
-                  }
-                }}>
-                  ✕
-                </button>
-              </div>
-            </li>)
-          }))
-        }
+            ?
+            <div className="dataLoader"><PropagateLoader color="#6B4A2F" /></div>
+            :
+            (tasksArray.map((element, index) => {
+              return (<li className="todo-item" key={index}>
+                <input type="checkbox" />
+                <span className="todo-text">{element.text}</span>
+                <div className="todo-actions">
+                  <button className="edit-btn" aria-label="Edit task" onClick={() => {
+                    edit_task(element.text, element.id)
+                  }}>
+                    ✎
+                  </button>
+                  <button className="delete-btn" aria-label="Delete task" onClick={() => {
+                    if (confirm("Have you complete it!")) {
+                      delete_task(element.id)
+                    }
+                  }}>
+                    ✕
+                  </button>
+                </div>
+              </li>)
+            }))
+          }
 
 
         </ul>
@@ -375,11 +376,11 @@ export default function Todo() {
             <button className="btn btn-ghost">Clear completed</button>
             <button className="btn btn-primary pdf-btn" onClick={() => downloadPdf(tasksArray)}>
               {pdfLoader
-              ?
-              <PropagateLoader color="#6B4A2F" />
-              :
-              "Download PDF"
-            }
+                ?
+                <PropagateLoader color="#6B4A2F" />
+                :
+                "Download PDF"
+              }
 
             </button>
           </div>
@@ -390,5 +391,5 @@ export default function Todo() {
 }
 
 
-// jaha error nhi ha jese empty input feild waha waring alert kerna ha or uska tile "Empty field " kerna ha
+
 // delete ke btn pr conform change kerna ha

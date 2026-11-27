@@ -195,7 +195,3 @@ export default function Signup() {
 }
 
 
-
-
-
-// spinner laganay ha sab me
